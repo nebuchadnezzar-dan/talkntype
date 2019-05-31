@@ -1,0 +1,30 @@
+.map {
+  height: 80vh;
+  width: 100%;
+  background-color: coral;
+}
+
+.cell {
+  height: 5rem;
+  width: 5rem;
+  background-color: brown;
+  margin: 0.1rem;
+}
+
+.active {
+  background-color: aquamarine;
+  animation: blink 2s infinite;
+}
+
+.rows {
+  display: flex;
+}
+
+@keyframes blink {
+  0% {
+    background-color: brown;
+  }
+  100% {
+    background-color: aquamarine;
+  }
+}

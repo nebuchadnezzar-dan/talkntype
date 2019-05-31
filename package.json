@@ -3,9 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "cors": "^2.8.5",
+    "express-rate-limit": "^4.0.3",
+    "express-secure-only": "^0.2.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "vcap_services": "^0.7.0",
+    "watson-developer-cloud": "^4.0.1",
+    "watson-speech": "^0.35.12"
   },
   "scripts": {
     "start": "react-scripts start",
