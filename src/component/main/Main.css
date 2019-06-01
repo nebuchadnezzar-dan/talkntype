@@ -1,19 +1,59 @@
-.map {
+:root {
+  --active-cell: #f8a5c2;
+  --dormant-cell: #63cdda;
+}
+
+.content {
+  background: radial-gradient(
+      circle,
+      transparent 20%,
+      slategray 20%,
+      slategray 80%,
+      transparent 80%,
+      transparent
+    ),
+    radial-gradient(
+        circle,
+        transparent 20%,
+        slategray 20%,
+        slategray 80%,
+        transparent 80%,
+        transparent
+      )
+      50px 50px,
+    linear-gradient(#a8b1bb 8px, transparent 8px) 0 -4px,
+    linear-gradient(90deg, #a8b1bb 8px, transparent 8px) -4px 0;
+  background-color: slategray;
+  background-color: #131313;
+  background-size: 20px 20px;
   height: 80vh;
   width: 100%;
-  background-color: coral;
+}
+
+.map {
+  height: 100%;
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  /* flex-wrap: wrap; */
+  justify-content: center;
 }
 
 .cell {
   height: 5rem;
   width: 5rem;
-  background-color: brown;
-  margin: 0.1rem;
+  background-color: var(--dormant-cell);
 }
 
 .active {
-  background-color: aquamarine;
-  animation: blink 2s infinite;
+  background-color: var(--active-cell);
+  animation: blink 0.5s infinite;
+  border-radius: 5px;
+}
+
+.passed {
+  background-color: var(--active-cell);
 }
 
 .rows {
@@ -22,9 +62,9 @@
 
 @keyframes blink {
   0% {
-    background-color: brown;
+    background-color: var(--dormant-cell);
   }
   100% {
-    background-color: aquamarine;
+    background-color: var(--active-cell);
   }
 }

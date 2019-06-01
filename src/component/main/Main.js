@@ -2,33 +2,37 @@ import React from 'react';
 import './Main.css';
 
 const Main = () => {
+  const row = 10;
+  const column = 19;
   const rowDiv = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < row; i++) {
     rowDiv.push([]);
-    for (let j = 0; j < 10; j++) {
+    for (let j = 0; j < column; j++) {
       rowDiv[i].push(<div className="cell" />);
     }
   }
-  console.log(rowDiv);
   return (
     <div className="main">
-      <div className="section text-center">
+      <div className="content">
         <div className="map">
           {rowDiv.map((row, i) => {
             const rowInd = i;
             return (
-              <div className="rows">
+              <div className="rows" key={i}>
                 {row.map((cell, i) => {
                   if (rowInd === 0 && i === 0) {
                     return (
                       <div
-                        className="cell active"
-                        data-cell={`(${rowInd},${i})`}
+                        className={`cell active x${rowInd}y${i}`}
+                        key={rowInd + i}
                       />
                     );
                   } else {
                     return (
-                      <div className="cell" data-cell={`(${rowInd},${i})`} />
+                      <div
+                        className={`cell x${rowInd}y${i}`}
+                        key={rowInd + i}
+                      />
                     );
                   }
                 })}

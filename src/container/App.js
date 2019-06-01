@@ -6,6 +6,36 @@ import Navigation from '../component/navigation/Navigation';
 
 import recognizeMic from 'watson-speech/speech-to-text/recognize-microphone';
 
+const onMove = directions => {
+  directions = directions.trim();
+  let x = document
+    .querySelector('.active')
+    .getAttribute('class')
+    .match(/x\d+/)[0]
+    .match(/\d+/)[0];
+  let y = document
+    .querySelector('.active')
+    .getAttribute('class')
+    .match(/y\d+/)[0]
+    .match(/\d+/)[0];
+  console.log(x, y);
+  if (directions === 'up') {
+    x = +x - 1;
+  } else if (directions === 'down') {
+    x = +x + 1;
+  } else if (directions === 'right') {
+    y = +y + 1;
+  } else if (directions === 'left') {
+    y = +y - 1;
+  }
+
+  if (document.querySelector(`.x${x}y${y}`)) {
+    document.querySelector('.active').classList.remove('active');
+    document.querySelector(`.x${x}y${y}`).classList.add('active');
+    document.querySelector(`.x${x}y${y}`).classList.add('passed');
+  }
+};
+
 class App extends Component {
   constructor() {
     super();
@@ -14,17 +44,21 @@ class App extends Component {
 
   onListenClick = () => {
     fetch('http://localhost:3002/api/speech-to-text/token')
-      .then(function(response) {
+      .then(response => {
         return response.text();
       })
-      .then(function(token) {
-        var stream = recognizeMic({
+      .then(token => {
+        const stream = recognizeMic({
           access_token: token, // use `access_token` as the parameter name if using an RC service
           objectMode: true, // send objects instead of text
           extractResults: true, // convert {results: [{alternatives:[...]}], result_index: 0} to {alternatives: [...], index: 0}
           format: false // optional - performs basic formatting on the results such as capitals an periods
         });
-        stream.on('data', function(data) {
+        stream.on('data', data => {
+          const directions = data.alternatives[0].transcript;
+          document.querySelector('.directions').value = directions;
+          this.onTest();
+          // onMove(directions);
           console.log(data.alternatives[0].transcript);
         });
         stream.on('error', function(err) {
@@ -37,8 +71,20 @@ class App extends Component {
       });
   };
 
-  onTest = () => {
-    console.log('works');
+  onTest = async () => {
+    let directions = document.querySelector('.directions').value;
+    let x = document
+      .querySelector('.active')
+      .getAttribute('class')
+      .match(/x\d+/)[0]
+      .match(/\d+/)[0];
+    let y = document
+      .querySelector('.active')
+      .getAttribute('class')
+      .match(/y\d+/)[0]
+      .match(/\d+/)[0];
+    console.log(x, y);
+    onMove(directions);
   };
 
   render() {
@@ -46,8 +92,22 @@ class App extends Component {
       <div className="App">
         <Navigation />
         <Template />
-        <button onClick={this.onListenClick}>Start Recording</button>
-        <button className="stop">Stop</button>
+        <div className="below">
+          <div className="record" onClick={this.onListenClick}>
+            <div className="record-outer" />
+            <div className="record-inner" />
+          </div>
+          <div className="input-container">
+            <input className="directions" onChange={this.onTest} />
+          </div>
+          {/* <button className="btn" onClick={this.onTest}>
+            Move
+          </button> */}
+          <div className="stop">
+            <div className="stop-outer" />
+            <div className="stop-inner" />
+          </div>
+        </div>
       </div>
     );
   }

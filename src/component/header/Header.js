@@ -15,7 +15,7 @@ const Header = () => {
       <div className="filter" />
       <div className="content-center">
         <div className="container">
-          <h2 className="presentation-subtitle text-center">Title</h2>
+          <h2 className="presentation-subtitle text-center">Talk n' Type</h2>
         </div>
       </div>
     </div>
