@@ -18,7 +18,6 @@ const onMove = directions => {
     .getAttribute('class')
     .match(/y\d+/)[0]
     .match(/\d+/)[0];
-  console.log(x, y);
   if (directions === 'up') {
     x = +x - 1;
   } else if (directions === 'down') {
@@ -58,8 +57,7 @@ class App extends Component {
           const directions = data.alternatives[0].transcript;
           document.querySelector('.directions').value = directions;
           this.onTest();
-          // onMove(directions);
-          console.log(data.alternatives[0].transcript);
+          // console.log(data.alternatives[0].transcript);
         });
         stream.on('error', function(err) {
           console.log(err);
@@ -100,9 +98,6 @@ class App extends Component {
           <div className="input-container">
             <input className="directions" onChange={this.onTest} />
           </div>
-          {/* <button className="btn" onClick={this.onTest}>
-            Move
-          </button> */}
           <div className="stop">
             <div className="stop-outer" />
             <div className="stop-inner" />
