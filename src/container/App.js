@@ -3,11 +3,12 @@ import './App.css';
 
 import Template from '../component/template/Template';
 import Navigation from '../component/navigation/Navigation';
+import Instructions from '../component/instructions/Instructions';
 
 import recognizeMic from 'watson-speech/speech-to-text/recognize-microphone';
 
 const onMove = directions => {
-  directions = directions.trim();
+  directions = directions.trim().toLowerCase();
   let x = document
     .querySelector('.active')
     .getAttribute('class')
@@ -42,7 +43,9 @@ class App extends Component {
   }
 
   onListenClick = () => {
-    fetch('http://localhost:3002/api/speech-to-text/token')
+    fetch(
+      'https://fathomless-atoll-29830.herokuapp.com/api/speech-to-text/token'
+    )
       .then(response => {
         return response.text();
       })
@@ -71,17 +74,6 @@ class App extends Component {
 
   onTest = async () => {
     let directions = document.querySelector('.directions').value;
-    let x = document
-      .querySelector('.active')
-      .getAttribute('class')
-      .match(/x\d+/)[0]
-      .match(/\d+/)[0];
-    let y = document
-      .querySelector('.active')
-      .getAttribute('class')
-      .match(/y\d+/)[0]
-      .match(/\d+/)[0];
-    console.log(x, y);
     onMove(directions);
   };
 
@@ -103,6 +95,7 @@ class App extends Component {
             <div className="stop-inner" />
           </div>
         </div>
+        <Instructions />
       </div>
     );
   }

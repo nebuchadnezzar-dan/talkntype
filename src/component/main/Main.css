@@ -1,6 +1,23 @@
 :root {
-  --active-cell: #f8a5c2;
-  --dormant-cell: #63cdda;
+  --active-cell: #f5cd79;
+  --dormant-cell: #303952;
+  --one: #f3a683;
+  --two: #f19066;
+  --three: #786fa6;
+  --four: #574b90;
+  --five: #f7d794;
+  --six: #f8a5c2;
+  --seven: #f78fb3;
+  --eight: #778beb;
+  --nine: #546de5;
+  --ten: #63cdda;
+  --eleven: #3dc1d3;
+  --twelve: #e77f67;
+  --thirteen: #e15f41;
+  --fourteen: #ea8685;
+  --fifteen: #e66767;
+  --sixteen: #cf6a87;
+  --seventeen: #c44569;
 }
 
 .content {
@@ -30,6 +47,70 @@
   width: 100%;
 }
 
+.upper-left-edge {
+  border-top-left-radius: 2rem;
+}
+.lower-left-edge {
+  border-bottom-left-radius: 2rem;
+}
+.upper-right-edge {
+  border-top-right-radius: 2rem;
+}
+.lower-right-edge {
+  border-bottom-right-radius: 2rem;
+}
+
+.rand-1 {
+  background-color: var(--one);
+}
+.rand-2 {
+  background-color: var(--two);
+}
+.rand-3 {
+  background-color: var(--three);
+}
+.rand-4 {
+  background-color: var(--four);
+}
+.rand-5 {
+  background-color: var(--five);
+}
+.rand-6 {
+  background-color: var(--six);
+}
+.rand-7 {
+  background-color: var(--seven);
+}
+.rand-8 {
+  background-color: var(--eight);
+}
+.rand-9 {
+  background-color: var(--nine);
+}
+.rand-10 {
+  background-color: var(--ten);
+}
+.rand-11 {
+  background-color: var(--eleven);
+}
+.rand-12 {
+  background-color: var(--twelve);
+}
+.rand-13 {
+  background-color: var(--thirteen);
+}
+.rand-14 {
+  background-color: var(--fourteen);
+}
+.rand-15 {
+  background-color: var(--fifteen);
+}
+.rand-16 {
+  background-color: var(--sixteen);
+}
+.rand-17 {
+  background-color: var(--seventeen);
+}
 .map {
   height: 100%;
   width: 70%;
@@ -38,22 +119,26 @@
   flex-direction: column;
   /* flex-wrap: wrap; */
   justify-content: center;
+  background-image: url(https://images.unsplash.com/photo-1510422136352-eaef78506ce5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80);
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .cell {
   height: 5rem;
   width: 5rem;
-  background-color: var(--dormant-cell);
+  /* background-color: var(--dormant-cell); */
 }
 
 .active {
   background-color: var(--active-cell);
   animation: blink 0.5s infinite;
-  border-radius: 5px;
+  /* border-radius: 2rem; */
 }
 
 .passed {
-  background-color: var(--active-cell);
+  background-color: transparent;
+  /* background-color: var(--active-cell); */
 }
 
 .rows {

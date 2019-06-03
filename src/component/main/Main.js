@@ -15,22 +15,46 @@ const Main = () => {
     <div className="main">
       <div className="content">
         <div className="map">
-          {rowDiv.map((row, i) => {
+          {rowDiv.map((row, i, rowArr) => {
             const rowInd = i;
+            const rowArrL = rowArr.length - 1;
             return (
               <div className="rows" key={i}>
-                {row.map((cell, i) => {
+                {row.map((cell, i, arr) => {
+                  const ilength = arr.length - 1;
+                  const num = Math.floor(Math.random() * 16 + 1);
                   if (rowInd === 0 && i === 0) {
                     return (
                       <div
-                        className={`cell active x${rowInd}y${i}`}
+                        className={`cell active rand-${num} upper-left-edge x${rowInd}y${i}`}
+                        key={rowInd + i}
+                      />
+                    );
+                  } else if (rowInd === rowArrL && i === 0) {
+                    return (
+                      <div
+                        className={`cell rand-${num} lower-left-edge x${rowInd}y${i}`}
+                        key={rowInd + i}
+                      />
+                    );
+                  } else if (rowInd === 0 && i === ilength) {
+                    return (
+                      <div
+                        className={`cell rand-${num} upper-right-edge x${rowInd}y${i}`}
+                        key={rowInd + i}
+                      />
+                    );
+                  } else if (rowInd === rowArrL && i === ilength) {
+                    return (
+                      <div
+                        className={`cell rand-${num} lower-right-edge x${rowInd}y${i}`}
                         key={rowInd + i}
                       />
                     );
                   } else {
                     return (
                       <div
-                        className={`cell x${rowInd}y${i}`}
+                        className={`cell rand-${num} x${rowInd}y${i}`}
                         key={rowInd + i}
                       />
                     );
