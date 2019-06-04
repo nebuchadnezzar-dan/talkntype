@@ -7,6 +7,12 @@
   justify-content: center;
   padding: 0.9rem 0;
   background-color: #778beb;
+  align-items: center;
+}
+
+.recording {
+  margin-right: 2rem;
+  font-size: 2rem;
 }
 
 .record {
@@ -14,6 +20,13 @@
   height: 6rem;
   width: 6rem;
   cursor: pointer;
+}
+
+.record-red {
+  color: red;
+  font-weight: bold;
+  animation: blink-record 1s infinite;
+  text-transform: uppercase;
 }
 
 .record-outer {
@@ -69,4 +82,58 @@
   border: 1px solid #dfe1e5;
   border-radius: 2rem;
   margin: 0 1.5rem;
+}
+
+.reload {
+  height: 6rem;
+  width: 6rem;
+  background-color: #fff;
+  border: 3px solid #000;
+  border-radius: 50%;
+  font-size: 6rem;
+  margin-left: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  position: relative;
+}
+
+.reload-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+}
+.lds-dual-ring:after {
+  content: ' ';
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes blink-record {
+  0% {
+    color: transparent;
+  }
+  100% {
+    color: red;
+  }
 }
