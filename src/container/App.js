@@ -1,44 +1,17 @@
 import React, { Component } from 'react';
 import './App.css';
 
+import { onReload as reload, onMove as move } from './controller';
+import { token as tokenFromApiToken } from './apitoken';
+
 import Template from '../component/template/Template';
 import Navigation from '../component/navigation/Navigation';
 import Instructions from '../component/instructions/Instructions';
 
 import recognizeMic from 'watson-speech/speech-to-text/recognize-microphone';
 
-const onMove = directions => {
-  directions = directions.trim().toLowerCase();
-  let directionsTrimmed;
-  if (/(up|down|right|left)+/.test(directions)) {
-    directionsTrimmed = directions.match(/(up|down|right|left)+/)[0];
-  }
-  let x = document
-    .querySelector('.active')
-    .getAttribute('class')
-    .match(/x\d+/)[0]
-    .match(/\d+/)[0];
-  let y = document
-    .querySelector('.active')
-    .getAttribute('class')
-    .match(/y\d+/)[0]
-    .match(/\d+/)[0];
-  if (directionsTrimmed === 'up') {
-    x = +x - 1;
-  } else if (directionsTrimmed === 'down') {
-    x = +x + 1;
-  } else if (directionsTrimmed === 'right') {
-    y = +y + 1;
-  } else if (directionsTrimmed === 'left') {
-    y = +y - 1;
-  }
-
-  if (document.querySelector(`.x${x}y${y}`)) {
-    document.querySelector('.active').classList.remove('active');
-    document.querySelector(`.x${x}y${y}`).classList.add('active');
-    document.querySelector(`.x${x}y${y}`).classList.add('passed');
-  }
-};
+const onReload = reload;
+const onMove = move;
 
 class App extends Component {
   constructor() {
@@ -49,9 +22,7 @@ class App extends Component {
   onListenClick = async () => {
     await this.setState({ loading: true });
     console.log(this.state.loading);
-    await fetch(
-      'https://fathomless-atoll-29830.herokuapp.com/api/speech-to-text/token'
-    )
+    await fetch(tokenFromApiToken)
       .then(response => {
         return response.text();
       })
@@ -85,15 +56,9 @@ class App extends Component {
     onMove(directions);
   };
 
-  onReload = () => {
-    document.querySelectorAll('.cell').forEach(el => {
-      el.classList.remove('passed');
-    });
-    document.querySelector('.active').classList.remove('active');
-    document.querySelector('.x0y0').classList.add('active');
-  };
   onStop = () => {
     this.setState({ recording: false });
+    onReload();
   };
 
   render() {
@@ -103,7 +68,7 @@ class App extends Component {
         <Template />
         <div className="below">
           <div className="recording">
-            {this.state.loading ? <div class="lds-dual-ring" /> : ''}
+            {this.state.loading ? <div className="lds-dual-ring" /> : ''}
             {this.state.recording ? (
               <p className="record-red">Recording!</p>
             ) : (
@@ -121,7 +86,7 @@ class App extends Component {
             <div className="stop-outer" />
             <div className="stop-inner" />
           </div>
-          <div className="reload" onClick={this.onReload}>
+          <div className="reload" onClick={onReload}>
             <div className="reload-outer">
               <div className="reload-inner">&#x21ba;</div>
             </div>

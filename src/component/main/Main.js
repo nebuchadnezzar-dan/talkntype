@@ -14,7 +14,7 @@ const Main = () => {
   return (
     <div className="main">
       <div className="content">
-        <div className="map">
+        <div className="map map-image-1">
           {rowDiv.map((row, i, rowArr) => {
             const rowInd = i;
             const rowArrL = rowArr.length - 1;

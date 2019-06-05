@@ -119,9 +119,30 @@
   flex-direction: column;
   /* flex-wrap: wrap; */
   justify-content: center;
-  background-image: url(https://images.unsplash.com/photo-1510422136352-eaef78506ce5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80);
   background-position: center;
   background-repeat: no-repeat;
+  background-size: 33.5rem;
+}
+
+.map-image-1 {
+  background-image: url(https://images.unsplash.com/photo-1510422136352-eaef78506ce5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80);
+}
+
+.map-image-2 {
+  background-image: url(https://memeswillsaveus.files.wordpress.com/2016/09/no_frisbee_dog.jpg);
+}
+.map-image-3 {
+  background-image: url(https://s.en.fishki.net/upload/en/2016/09/27/2087349/tn/b3d6a250971b0e8c6b2c620c4d615c43.jpg);
+}
+.map-image-4 {
+  background-image: url(https://cdn.cnn.com/cnn/interactive/2018/11/entertainment/dogs-catching-treats-cnnphotos/media/01.jpg);
+}
+.map-image-5 {
+  background-image: url(https://cdn.cnn.com/cnn/interactive/2018/11/entertainment/dogs-catching-treats-cnnphotos/media/12.jpg);
+}
+
+.map-image-6 {
+  background-image: url(https://s.yimg.com/uu/api/res/1.2/DEo3I5JT6oYXalHAuwy4PQ--~B/aD0zMTkxO3c9NDI1NTtzbT0xO2FwcGlkPXl0YWNoeW9u/http://media.zenfs.com/en/homerun/feed_manager_auto_publish_494/90af411c19c3584066156046d6450660);
 }
 
 .cell {

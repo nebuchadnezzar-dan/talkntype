@@ -16,7 +16,13 @@ const Navigation = () => {
           <p className="title">Talk n' Type</p>
         </div>
         <div className="title-container">
-          <Github />
+          <a
+            href="https://github.com/nebuchadnezzar-dan/talkntype"
+            // eslint-disable-next-line
+            target="_blank"
+          >
+            <Github />
+          </a>
         </div>
       </div>
     </nav>

@@ -23,7 +23,10 @@ const Instructions = () => {
           commands as the ones above!
         </p>
         <p>Press the stop &#9632; button if you want to stop recording!</p>
-        <p>Press the reload &#x21ba; button if you want to restart!</p>
+        <p>
+          Press the reload &#x21ba; button or say/type{' '}
+          <em className="censor">restart</em> if you want to restart!
+        </p>
       </div>
       <div className="instructions-below" />
     </div>
