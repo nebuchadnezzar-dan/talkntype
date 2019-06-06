@@ -8,7 +8,7 @@ const Instructions = () => {
       <div className="instructions-container">
         <h2>Instructions</h2>
         <p>
-          A grumpy doge is hidden inside that cover! If you want to see it, all
+          A doge is hidden inside that cover! If you want to see it, all
           you have to do is instruct your browser to clear the cover by pressing
           the record <span className="rec">&#x2022;</span> button and say the
           magic commands &ensp;
