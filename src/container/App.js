@@ -55,6 +55,12 @@ class App extends Component {
     let directions = document.querySelector('.directions').value;
     onMove(directions);
   };
+  onKeydownHandler = e => {
+    if (e.keyCode === 13) {
+      let directions = document.querySelector('.directions').value;
+      onMove(directions);
+    }
+  };
 
   onStop = () => {
     this.setState({ recording: false });
@@ -80,7 +86,11 @@ class App extends Component {
             <div className="record-inner" />
           </div>
           <div className="input-container">
-            <input className="directions" onChange={this.onTest} />
+            <input
+              className="directions"
+              onChange={this.onTest}
+              onKeyDown={this.onKeydownHandler.bind(this)}
+            />
           </div>
           <div className="stop" onClick={this.onStop}>
             <div className="stop-outer" />
