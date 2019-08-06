@@ -43,8 +43,8 @@
   background-color: slategray;
   background-color: #131313;
   background-size: 20px 20px;
-  height: 80vh;
   width: 100%;
+  padding: 2rem 0;
 }
 
 .upper-left-edge {
@@ -122,6 +122,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: 33.5rem;
+  overflow: auto;
 }
 
 .map-image-1 {

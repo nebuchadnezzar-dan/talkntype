@@ -6,10 +6,7 @@ import { ReactComponent as Github } from '../../img/github.svg';
 
 const Navigation = () => {
   return (
-    <nav
-      className="navbar navbar-expand-md fixed-top navbar-transparent"
-      color-on-scroll="500"
-    >
+    <nav>
       <div className="container">
         <div className="logo-container">
           <Logo className="logo" />
