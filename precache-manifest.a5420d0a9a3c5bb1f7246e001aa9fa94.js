@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a60627e636899ef18f6044dc1399e65c",
+    "revision": "9c3a406336f48c0d24b733e0ebe3fa26",
     "url": "/talkntype/index.html"
   },
   {
-    "revision": "a1ff8d1fe2092dae8f8b",
+    "revision": "ae43fa236c5c21047c9a",
     "url": "/talkntype/static/css/main.98f5ef6f.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/talkntype/static/js/2.2115116b.chunk.js"
   },
   {
-    "revision": "a1ff8d1fe2092dae8f8b",
-    "url": "/talkntype/static/js/main.376a560a.chunk.js"
+    "revision": "ae43fa236c5c21047c9a",
+    "url": "/talkntype/static/js/main.91001aae.chunk.js"
   },
   {
     "revision": "3c57e53cdd44c57eaf84",
