@@ -76,12 +76,14 @@
   font-size: 5rem;
   border-radius: 2rem;
   border: none;
+  width: 100%;
 }
 
 .input-container {
   border: 1px solid #dfe1e5;
   border-radius: 2rem;
   margin: 0 1.5rem;
+  width: 90%;
 }
 
 .reload {
@@ -104,6 +106,13 @@
   transform: translate(-50%, -50%);
 }
 
+@media only screen and (max-width: 900px) {
+  .reload {
+    font-size: 4rem;
+    height: 5rem;
+  }
+}
+
 .lds-dual-ring {
   display: inline-block;
   width: 64px;
@@ -120,6 +129,61 @@
   border-color: #fff transparent #fff transparent;
   animation: lds-dual-ring 1.2s linear infinite;
 }
+
+@media only screen and (max-width: 500px) {
+  .reload {
+    font-size: 2rem;
+    height: 3rem;
+    width: 4rem;
+    margin-left: 1rem;
+  }
+  .record {
+    height: 3rem;
+    width: 3rem;
+  }
+  .record-outer {
+    height: 3rem;
+    width: 3rem;
+  }
+  .record-inner {
+    height: 2rem;
+    width: 2rem;
+  }
+  .recording {
+    margin-right: 1rem;
+    font-size: 1rem;
+  }
+  .stop {
+    height: 3rem;
+    width: 3rem;
+  }
+  .stop-outer {
+    height: 3rem;
+    width: 3rem;
+  }
+  .stop-inner {
+    height: 2rem;
+    width: 2rem;
+  }
+  .input-container {
+    margin: 0 0.5rem;
+    /* width: 90%; */
+  }
+  .directions {
+    font-size: 3rem;
+  }
+  .lds-dual-ring {
+    width: 32px;
+    height: 32px;
+  }
+  .lds-dual-ring:after {
+    width: 25px;
+    height: 25px;
+    border: 3px solid #fff;
+    border-color: #fff transparent #fff transparent;
+  }
+}
+
 @keyframes lds-dual-ring {
   0% {
     transform: rotate(0deg);
