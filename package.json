@@ -13,6 +13,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
+    "serialize-javascript": "^2.1.2",
     "vcap_services": "^0.7.0",
     "watson-developer-cloud": "^4.0.1",
     "watson-speech": "^0.35.12"
