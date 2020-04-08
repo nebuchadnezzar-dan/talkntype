@@ -10,6 +10,7 @@
     "express-secure-only": "^0.2.1",
     "gh-pages": "^2.2.0",
     "lodash": "^4.17.15",
+    "minimist": "^1.2.5",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-scripts": "3.0.1",
