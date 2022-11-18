@@ -13,7 +13,7 @@
     "minimist": "^1.2.5",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-scripts": "3.0.1",
+    "react-scripts": "5.0.1",
     "serialize-javascript": "^2.1.2",
     "vcap_services": "^0.7.1",
     "watson-developer-cloud": "^4.0.1",
