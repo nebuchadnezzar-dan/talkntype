@@ -1,0 +1,45 @@
+{
+  "name": "talkntype",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://nebuchadnezzar-dan.github.io/talkntype/",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "eslint-utils": "^1.4.3",
+    "express-rate-limit": "^4.0.4",
+    "express-secure-only": "^0.2.1",
+    "gh-pages": "^5.0.0",
+    "lodash": "^4.17.21",
+    "minimist": "^1.2.5",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-scripts": "3.0.1",
+    "serialize-javascript": "^3.1.0",
+    "vcap_services": "^0.7.1",
+    "watson-developer-cloud": "^4.0.1",
+    "watson-speech": "^0.35.12"
+  },
+  "scripts": {
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

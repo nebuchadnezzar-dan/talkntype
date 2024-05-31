@@ -1,0 +1,199 @@
+:root {
+  --active-cell: #f5cd79;
+  --dormant-cell: #303952;
+  --one: #f3a683;
+  --two: #f19066;
+  --three: #786fa6;
+  --four: #574b90;
+  --five: #f7d794;
+  --six: #f8a5c2;
+  --seven: #f78fb3;
+  --eight: #778beb;
+  --nine: #546de5;
+  --ten: #63cdda;
+  --eleven: #3dc1d3;
+  --twelve: #e77f67;
+  --thirteen: #e15f41;
+  --fourteen: #ea8685;
+  --fifteen: #e66767;
+  --sixteen: #cf6a87;
+  --seventeen: #c44569;
+}
+
+.content {
+  background: radial-gradient(
+      circle,
+      transparent 20%,
+      slategray 20%,
+      slategray 80%,
+      transparent 80%,
+      transparent
+    ),
+    radial-gradient(
+        circle,
+        transparent 20%,
+        slategray 20%,
+        slategray 80%,
+        transparent 80%,
+        transparent
+      )
+      50px 50px,
+    linear-gradient(#a8b1bb 8px, transparent 8px) 0 -4px,
+    linear-gradient(90deg, #a8b1bb 8px, transparent 8px) -4px 0;
+  background-color: slategray;
+  background-color: #131313;
+  background-size: 20px 20px;
+  width: 100%;
+  padding: 2rem 0;
+}
+
+.upper-left-edge {
+  border-top-left-radius: 2rem;
+}
+.lower-left-edge {
+  border-bottom-left-radius: 2rem;
+}
+.upper-right-edge {
+  border-top-right-radius: 2rem;
+}
+.lower-right-edge {
+  border-bottom-right-radius: 2rem;
+}
+
+.rand-1 {
+  background-color: var(--one);
+}
+.rand-2 {
+  background-color: var(--two);
+}
+.rand-3 {
+  background-color: var(--three);
+}
+.rand-4 {
+  background-color: var(--four);
+}
+.rand-5 {
+  background-color: var(--five);
+}
+.rand-6 {
+  background-color: var(--six);
+}
+.rand-7 {
+  background-color: var(--seven);
+}
+.rand-8 {
+  background-color: var(--eight);
+}
+.rand-9 {
+  background-color: var(--nine);
+}
+.rand-10 {
+  background-color: var(--ten);
+}
+.rand-11 {
+  background-color: var(--eleven);
+}
+.rand-12 {
+  background-color: var(--twelve);
+}
+.rand-13 {
+  background-color: var(--thirteen);
+}
+.rand-14 {
+  background-color: var(--fourteen);
+}
+.rand-15 {
+  background-color: var(--fifteen);
+}
+.rand-16 {
+  background-color: var(--sixteen);
+}
+.rand-17 {
+  background-color: var(--seventeen);
+}
+.map {
+  height: 100%;
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  /* flex-wrap: wrap; */
+  justify-content: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 33.5rem;
+  overflow: auto;
+}
+
+.map-image-1 {
+  background-image: url(https://images.unsplash.com/photo-1510422136352-eaef78506ce5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80);
+}
+
+.map-image-2 {
+  background-image: url(https://memeswillsaveus.files.wordpress.com/2016/09/no_frisbee_dog.jpg);
+}
+.map-image-3 {
+  background-image: url(https://s.en.fishki.net/upload/en/2016/09/27/2087349/tn/b3d6a250971b0e8c6b2c620c4d615c43.jpg);
+}
+.map-image-4 {
+  background-image: url(https://cdn.cnn.com/cnn/interactive/2018/11/entertainment/dogs-catching-treats-cnnphotos/media/01.jpg);
+}
+.map-image-5 {
+  background-image: url(https://cdn.cnn.com/cnn/interactive/2018/11/entertainment/dogs-catching-treats-cnnphotos/media/12.jpg);
+}
+
+.map-image-6 {
+  background-image: url(https://s.yimg.com/uu/api/res/1.2/DEo3I5JT6oYXalHAuwy4PQ--~B/aD0zMTkxO3c9NDI1NTtzbT0xO2FwcGlkPXl0YWNoeW9u/http://media.zenfs.com/en/homerun/feed_manager_auto_publish_494/90af411c19c3584066156046d6450660);
+}
+
+.cell {
+  height: 5rem;
+  width: 5rem;
+  /* background-color: var(--dormant-cell); */
+}
+
+.active {
+  background-color: var(--active-cell);
+  animation: blink 0.5s infinite;
+  /* border-radius: 2rem; */
+}
+
+.passed {
+  background-color: transparent;
+  /* background-color: var(--active-cell); */
+}
+
+.rows {
+  display: flex;
+}
+
+@media only screen and (max-width: 800px) {
+  .map {
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: 501px) {
+  .map {
+    background-size: 19.5rem;
+    width: 100%;
+  }
+  .cell {
+    height: 3rem;
+    width: 3rem;
+  }
+}
+/* @media only screen and (min-width: 51rem) {
+  .map {
+    width: 70%;
+  }
+} */
+
+@keyframes blink {
+  0% {
+    background-color: var(--dormant-cell);
+  }
+  100% {
+    background-color: var(--active-cell);
+  }
+}

@@ -1,0 +1,203 @@
+.App {
+  text-align: center;
+}
+
+.below {
+  display: flex;
+  justify-content: center;
+  padding: 0.9rem 0;
+  background-color: #778beb;
+  align-items: center;
+}
+
+.recording {
+  margin-right: 2rem;
+  font-size: 2rem;
+}
+
+.record {
+  position: relative;
+  height: 6rem;
+  width: 6rem;
+  cursor: pointer;
+}
+
+.record-red {
+  color: red;
+  font-weight: bold;
+  animation: blink-record 1s infinite;
+  text-transform: uppercase;
+}
+
+.record-outer {
+  height: 6rem;
+  width: 6rem;
+  border: 1px solid #000;
+  border-radius: 50%;
+  background-color: #fff;
+}
+.record-inner {
+  height: 4rem;
+  width: 4rem;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.stop {
+  position: relative;
+  height: 6rem;
+  width: 6rem;
+  cursor: pointer;
+}
+
+.stop-outer {
+  height: 6rem;
+  width: 6rem;
+  background-color: #000;
+  /* border: 3px solid #000; */
+  border-radius: 50%;
+}
+.stop-inner {
+  height: 3rem;
+  width: 3rem;
+  background-color: #fff;
+  border-radius: 3px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.directions {
+  font-size: 5rem;
+  border-radius: 2rem;
+  border: none;
+  width: 100%;
+}
+
+.input-container {
+  border: 1px solid #dfe1e5;
+  border-radius: 2rem;
+  margin: 0 1.5rem;
+  width: 90%;
+}
+
+.reload {
+  height: 6rem;
+  width: 6rem;
+  background-color: #fff;
+  border: 3px solid #000;
+  border-radius: 50%;
+  font-size: 6rem;
+  margin-left: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  position: relative;
+}
+
+.reload-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media only screen and (max-width: 900px) {
+  .reload {
+    font-size: 4rem;
+    height: 5rem;
+  }
+}
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+}
+.lds-dual-ring:after {
+  content: ' ';
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@media only screen and (max-width: 500px) {
+  .reload {
+    font-size: 2rem;
+    height: 3rem;
+    width: 4rem;
+    margin-left: 1rem;
+  }
+  .record {
+    height: 3rem;
+    width: 3rem;
+  }
+  .record-outer {
+    height: 3rem;
+    width: 3rem;
+  }
+  .record-inner {
+    height: 2rem;
+    width: 2rem;
+  }
+  .recording {
+    margin-right: 1rem;
+    font-size: 1rem;
+  }
+  .stop {
+    height: 3rem;
+    width: 3rem;
+  }
+  .stop-outer {
+    height: 3rem;
+    width: 3rem;
+  }
+  .stop-inner {
+    height: 2rem;
+    width: 2rem;
+  }
+  .input-container {
+    margin: 0 0.5rem;
+    /* width: 90%; */
+  }
+  .directions {
+    font-size: 3rem;
+  }
+  .lds-dual-ring {
+    width: 32px;
+    height: 32px;
+  }
+  .lds-dual-ring:after {
+    width: 25px;
+    height: 25px;
+    border: 3px solid #fff;
+    border-color: #fff transparent #fff transparent;
+  }
+}
+
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes blink-record {
+  0% {
+    color: transparent;
+  }
+  100% {
+    color: red;
+  }
+}
