@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
 
-import { onReload as reload, onMove as move } from './controller';
-import { token as tokenFromApiToken } from './apitoken';
+import { onReload as reload, onMove as move } from "./controller";
+import { token as tokenFromApiToken } from "./apitoken";
 
-import Template from '../component/template/Template';
-import Navigation from '../component/navigation/Navigation';
-import Instructions from '../component/instructions/Instructions';
+import Template from "../component/template/Template";
+import Navigation from "../component/navigation/Navigation";
+import Instructions from "../component/instructions/Instructions";
 
-import recognizeMic from 'watson-speech/speech-to-text/recognize-microphone';
+import recognizeMic from "watson-speech/speech-to-text/recognize-microphone";
 
 const onReload = reload;
 const onMove = move;
@@ -17,47 +17,48 @@ class App extends Component {
   constructor() {
     super();
     this.state = {};
+    //checking
   }
 
   onListenClick = async () => {
     await this.setState({ loading: true });
     console.log(this.state.loading);
     await fetch(tokenFromApiToken)
-      .then(response => {
+      .then((response) => {
         return response.text();
       })
-      .then(token => {
+      .then((token) => {
         const stream = recognizeMic({
           access_token: token, // use `access_token` as the parameter name if using an RC service
           objectMode: true, // send objects instead of text
           extractResults: true, // convert {results: [{alternatives:[...]}], result_index: 0} to {alternatives: [...], index: 0}
-          format: false // optional - performs basic formatting on the results such as capitals an periods
+          format: false, // optional - performs basic formatting on the results such as capitals an periods
         });
         this.setState({ loading: false, recording: true });
         // console.log(this.state.loading);
-        stream.on('data', data => {
+        stream.on("data", (data) => {
           const directions = data.alternatives[0].transcript;
-          document.querySelector('.directions').value = directions;
+          document.querySelector(".directions").value = directions;
           this.onTest();
           // console.log(data.alternatives[0].transcript);
         });
-        stream.on('error', function(err) {
+        stream.on("error", function (err) {
           console.log(err);
         });
-        document.querySelector('.stop').onclick = stream.stop.bind(stream);
+        document.querySelector(".stop").onclick = stream.stop.bind(stream);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };
 
   onTest = () => {
-    let directions = document.querySelector('.directions').value;
+    let directions = document.querySelector(".directions").value;
     onMove(directions);
   };
-  onKeydownHandler = e => {
+  onKeydownHandler = (e) => {
     if (e.keyCode === 13) {
-      let directions = document.querySelector('.directions').value;
+      let directions = document.querySelector(".directions").value;
       onMove(directions);
     }
   };
@@ -74,7 +75,7 @@ class App extends Component {
         <Template />
         <div className="below">
           <div className="recording">
-            {this.state.loading ? <div className="lds-dual-ring" /> : ''}
+            {this.state.loading ? <div className="lds-dual-ring" /> : ""}
             {this.state.recording ? (
               <p className="record-red">Recording!</p>
             ) : (
