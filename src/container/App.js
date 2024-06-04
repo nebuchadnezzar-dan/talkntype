@@ -1,17 +1,20 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
 
-import { onReload as reload, onMove as move } from './controller';
-import { token as tokenFromApiToken } from './apitoken';
+import { onReload as reload, onMove as move } from "./controller";
 
-import Template from '../component/template/Template';
-import Navigation from '../component/navigation/Navigation';
-import Instructions from '../component/instructions/Instructions';
-
-import recognizeMic from 'watson-speech/speech-to-text/recognize-microphone';
+import Template from "../component/template/Template";
+import Navigation from "../component/navigation/Navigation";
+import Instructions from "../component/instructions/Instructions";
 
 const onReload = reload;
 const onMove = move;
+const recognition = new (window.SpeechRecognition ||
+  window.webkitSpeechRecognition ||
+  window.mozSpeechRecognition ||
+  window.msSpeechRecognition)();
+recognition.lang = "en-US";
+recognition.continuous = true;
 
 class App extends Component {
   constructor() {
@@ -19,45 +22,73 @@ class App extends Component {
     this.state = {};
   }
 
-  onListenClick = async () => {
-    await this.setState({ loading: true });
-    console.log(this.state.loading);
-    await fetch(tokenFromApiToken)
-      .then(response => {
-        return response.text();
-      })
-      .then(token => {
-        const stream = recognizeMic({
-          access_token: token, // use `access_token` as the parameter name if using an RC service
-          objectMode: true, // send objects instead of text
-          extractResults: true, // convert {results: [{alternatives:[...]}], result_index: 0} to {alternatives: [...], index: 0}
-          format: false // optional - performs basic formatting on the results such as capitals an periods
-        });
-        this.setState({ loading: false, recording: true });
-        // console.log(this.state.loading);
-        stream.on('data', data => {
-          const directions = data.alternatives[0].transcript;
-          document.querySelector('.directions').value = directions;
-          this.onTest();
-          // console.log(data.alternatives[0].transcript);
-        });
-        stream.on('error', function(err) {
-          console.log(err);
-        });
-        document.querySelector('.stop').onclick = stream.stop.bind(stream);
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
+  onListenClick = () => {
+    const indicator = document.createElement("div");
+    indicator.textContent = "Recording!";
+
+    recognition.start();
+    recognition.onstart = () => {
+      console.log("listening");
+      document.querySelector(".indicator").appendChild(indicator);
+    };
+
+    recognition.onresult = (event) => {
+      var transcript = "";
+      for (var i = event.resultIndex; i < event.results.length; i++) {
+        transcript = event.results[i][0].transcript;
+        transcript.replace("\n", "<br>");
+      }
+
+      onMove(transcript);
+      document.querySelector(".directions").value = transcript;
+    };
+
+    recognition.onend = () => {
+      console.log("ended");
+      const indicator = document.querySelector(".indicator");
+      indicator.removeChild(indicator.firstChild);
+    };
   };
 
+  // onListenClick = async () => {
+  //   await this.setState({ loading: true });
+  //   console.log(this.state.loading);
+  //   await fetch(tokenFromApiToken)
+  //     .then(response => {
+  //       return response.text();
+  //     })
+  //     .then(token => {
+  //       const stream = recognizeMic({
+  //         access_token: token, // use `access_token` as the parameter name if using an RC service
+  //         objectMode: true, // send objects instead of text
+  //         extractResults: true, // convert {results: [{alternatives:[...]}], result_index: 0} to {alternatives: [...], index: 0}
+  //         format: false // optional - performs basic formatting on the results such as capitals an periods
+  //       });
+  //       this.setState({ loading: false, recording: true });
+  //       // console.log(this.state.loading);
+  //       stream.on('data', data => {
+  //         const directions = data.alternatives[0].transcript;
+  //         document.querySelector('.directions').value = directions;
+  //         this.onTest();
+  //         // console.log(data.alternatives[0].transcript);
+  //       });
+  //       stream.on('error', function(err) {
+  //         console.log(err);
+  //       });
+  //       document.querySelector('.stop').onclick = stream.stop.bind(stream);
+  //     })
+  //     .catch(function(error) {
+  //       console.log(error);
+  //     });
+  // };
+
   onTest = () => {
-    let directions = document.querySelector('.directions').value;
+    let directions = document.querySelector(".directions").value;
     onMove(directions);
   };
-  onKeydownHandler = e => {
+  onKeydownHandler = (e) => {
     if (e.keyCode === 13) {
-      let directions = document.querySelector('.directions').value;
+      let directions = document.querySelector(".directions").value;
       onMove(directions);
     }
   };
@@ -65,6 +96,7 @@ class App extends Component {
   onStop = () => {
     this.setState({ recording: false });
     onReload();
+    recognition.abort();
   };
 
   render() {
@@ -74,7 +106,8 @@ class App extends Component {
         <Template />
         <div className="below">
           <div className="recording">
-            {this.state.loading ? <div className="lds-dual-ring" /> : ''}
+            {/* {<div className="loading lds-dual-ring" />} */}
+            <div className="indicator"></div>
             {this.state.recording ? (
               <p className="record-red">Recording!</p>
             ) : (
