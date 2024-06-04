@@ -1,14 +1,15 @@
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useRef, useState } from "react";
 import "./App.css";
 
-import { onReload as reload, onMove as move } from "./controller";
+import { onReload as reload } from "./controller";
 
 import Template from "../component/template/Template";
 import Navigation from "../component/navigation/Navigation";
 import Instructions from "../component/instructions/Instructions";
+import { useKey } from "../useKey";
 
 const onReload = reload;
-const onMove = move;
+// const onMove = move;
 const recognition = new (window.SpeechRecognition ||
   window.webkitSpeechRecognition ||
   window.mozSpeechRecognition ||
@@ -59,10 +60,36 @@ function generateMatrix() {
   return matrix;
 }
 
+function getIndexOfK(arr, k) {
+  for (var i = 0; i < arr.length; i++) {
+    var index = arr[i].indexOf(k);
+    if (index > -1) {
+      return [i, index];
+    }
+  }
+}
+
 function App() {
   const [isRecording, setIsRecording] = useState(false);
   const [directions, setIsDirections] = useState("");
-  const [matrix, setIsMatrix] = useState(generateMatrix());
+  const [matrix] = useState(generateMatrix());
+  // const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
+  const x = useRef(0);
+  const y = useRef(0);
+
+  useKey("ArrowDown", function () {
+    onMove("down");
+  });
+  useKey("ArrowRight", function () {
+    onMove("right");
+  });
+  useKey("ArrowLeft", function () {
+    onMove("left");
+  });
+  useKey("ArrowUp", function () {
+    onMove("up");
+  });
+
   function onListenClick() {
     setIsRecording(true);
     recognition.start();
@@ -77,8 +104,9 @@ function App() {
         transcript.replace("\n", "<br>");
       }
 
-      onMove(transcript);
       setIsDirections(transcript);
+      // console.log(transcript);
+      onMove(transcript);
       // document.querySelector(".directions").value = transcript;
     };
 
@@ -89,13 +117,13 @@ function App() {
 
   function onTest(e) {
     // let directions = document.querySelector(".directions").value;
-    onMove(e.target.value);
+    onMove();
     setIsDirections(e.target.value);
   }
   function onKeydownHandler(e) {
     if (e.keyCode === 13) {
-      let directions = document.querySelector(".directions").value;
-      onMove(directions);
+      // let directions = document.querySelector(".directions").value;
+      onMove();
     }
   }
 
@@ -104,6 +132,40 @@ function App() {
     setIsRecording(false);
     onReload();
     recognition.abort();
+  }
+
+  function onMove(transcript = "") {
+    console.log(transcript);
+    let directionsTrimmed = directions === "" ? transcript : directions;
+    const RawDirections = directions.trim().toLowerCase();
+    // let directionsTrimmed;
+    if (/(up|down|right|left|restart)+/.test(RawDirections)) {
+      directionsTrimmed = directions.match(/(up|down|right|left|restart)+/)[0];
+    }
+
+    if (directionsTrimmed === "up") {
+      x.current = +x.current - 1;
+    } else if (directionsTrimmed === "down") {
+      x.current = +x.current + 1;
+    } else if (directionsTrimmed === "right") {
+      y.current = +y.current + 1;
+    } else if (directionsTrimmed === "left") {
+      y.current = +y.current - 1;
+    } else if (directionsTrimmed === "restart") {
+      onReload();
+      return "reloaded";
+    }
+
+    if (document.querySelector(`.x${x.current}y${y.current}`)) {
+      console.log(x, y);
+      document.querySelector(".active").classList.remove("active");
+      document
+        .querySelector(`.x${x.current}y${y.current}`)
+        .classList.add("active");
+      document
+        .querySelector(`.x${x.current}y${y.current}`)
+        .classList.add("passed");
+    }
   }
 
   return (
