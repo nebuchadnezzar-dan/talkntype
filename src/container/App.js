@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import "./App.css";
 
 import { onReload as reload, onMove as move } from "./controller";
@@ -16,20 +16,58 @@ const recognition = new (window.SpeechRecognition ||
 recognition.lang = "en-US";
 recognition.continuous = true;
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
+function generateMatrix() {
+  const row = 10;
+  const column = 19;
+  const rowDiv = new Array(row).fill(new Array(column).fill({}));
 
-  onListenClick = () => {
-    const indicator = document.createElement("div");
-    indicator.textContent = "Recording!";
+  const matrix = rowDiv.map((row, i, rowArr) => {
+    const rowInd = i;
+    const rowArrL = rowArr.length - 1;
+    return row.map((_, i, arr) => {
+      const ilength = arr.length - 1;
+      const num = Math.floor(Math.random() * 16 + 1);
+      if (rowInd === 0 && i === 0) {
+        return {
+          className: `cell active rand-${num} upper-left-edge x${rowInd}y${i}`,
+          key: rowInd + i,
+        };
+      } else if (rowInd === rowArrL && i === 0) {
+        return {
+          className: `cell rand-${num} lower-left-edge x${rowInd}y${i}`,
+          key: rowInd + i,
+        };
+      } else if (rowInd === 0 && i === ilength) {
+        return {
+          className: `cell rand-${num} upper-right-edge x${rowInd}y${i}`,
+          key: rowInd + i,
+        };
+      } else if (rowInd === rowArrL && i === ilength) {
+        return {
+          className: `cell rand-${num} lower-right-edge x${rowInd}y${i}`,
+          key: rowInd + i,
+        };
+      } else {
+        return {
+          className: `cell rand-${num} x${rowInd}y${i}`,
+          key: rowInd + i,
+        };
+      }
+    });
+  });
+  // console.log(matrix);
+  return matrix;
+}
 
+function App() {
+  const [isRecording, setIsRecording] = useState(false);
+  const [directions, setIsDirections] = useState("");
+  const [matrix, setIsMatrix] = useState(generateMatrix());
+  function onListenClick() {
+    setIsRecording(true);
     recognition.start();
     recognition.onstart = () => {
       console.log("listening");
-      document.querySelector(".indicator").appendChild(indicator);
     };
 
     recognition.onresult = (event) => {
@@ -40,105 +78,73 @@ class App extends Component {
       }
 
       onMove(transcript);
-      document.querySelector(".directions").value = transcript;
+      setIsDirections(transcript);
+      // document.querySelector(".directions").value = transcript;
     };
 
     recognition.onend = () => {
       console.log("ended");
-      const indicator = document.querySelector(".indicator");
-      indicator.removeChild(indicator.firstChild);
     };
-  };
+  }
 
-  // onListenClick = async () => {
-  //   await this.setState({ loading: true });
-  //   console.log(this.state.loading);
-  //   await fetch(tokenFromApiToken)
-  //     .then(response => {
-  //       return response.text();
-  //     })
-  //     .then(token => {
-  //       const stream = recognizeMic({
-  //         access_token: token, // use `access_token` as the parameter name if using an RC service
-  //         objectMode: true, // send objects instead of text
-  //         extractResults: true, // convert {results: [{alternatives:[...]}], result_index: 0} to {alternatives: [...], index: 0}
-  //         format: false // optional - performs basic formatting on the results such as capitals an periods
-  //       });
-  //       this.setState({ loading: false, recording: true });
-  //       // console.log(this.state.loading);
-  //       stream.on('data', data => {
-  //         const directions = data.alternatives[0].transcript;
-  //         document.querySelector('.directions').value = directions;
-  //         this.onTest();
-  //         // console.log(data.alternatives[0].transcript);
-  //       });
-  //       stream.on('error', function(err) {
-  //         console.log(err);
-  //       });
-  //       document.querySelector('.stop').onclick = stream.stop.bind(stream);
-  //     })
-  //     .catch(function(error) {
-  //       console.log(error);
-  //     });
-  // };
-
-  onTest = () => {
-    let directions = document.querySelector(".directions").value;
-    onMove(directions);
-  };
-  onKeydownHandler = (e) => {
+  function onTest(e) {
+    // let directions = document.querySelector(".directions").value;
+    onMove(e.target.value);
+    setIsDirections(e.target.value);
+  }
+  function onKeydownHandler(e) {
     if (e.keyCode === 13) {
       let directions = document.querySelector(".directions").value;
       onMove(directions);
     }
-  };
+  }
 
-  onStop = () => {
-    this.setState({ recording: false });
+  function onStop() {
+    // this.setState({ recording: false });
+    setIsRecording(false);
     onReload();
     recognition.abort();
-  };
+  }
 
-  render() {
-    return (
-      <div className="App">
-        <Navigation />
-        <Template />
-        <div className="below">
-          <div className="recording">
-            {/* {<div className="loading lds-dual-ring" />} */}
-            <div className="indicator"></div>
-            {this.state.recording ? (
-              <p className="record-red">Recording!</p>
-            ) : (
-              <p className="not-record">Not Recording</p>
-            )}
-          </div>
-          <div className="record" onClick={this.onListenClick}>
-            <div className="record-outer" />
-            <div className="record-inner" />
-          </div>
-          <div className="input-container">
-            <input
-              className="directions"
-              onChange={this.onTest}
-              onKeyDown={this.onKeydownHandler.bind(this)}
-            />
-          </div>
-          <div className="stop" onClick={this.onStop}>
-            <div className="stop-outer" />
-            <div className="stop-inner" />
-          </div>
-          <div className="reload" onClick={onReload}>
-            <div className="reload-outer">
-              <div className="reload-inner">&#x21ba;</div>
-            </div>
+  return (
+    <div className="App">
+      <Navigation />
+      <Template matrix={matrix} />
+      <div className="below">
+        <div className="recording">
+          {/* {<div className="loading lds-dual-ring" />} */}
+          <div className="indicator"></div>
+          {isRecording ? (
+            <p className="record-red">Recording!</p>
+          ) : (
+            <p className="not-record">Not Recording</p>
+          )}
+        </div>
+        <div className="record" onClick={onListenClick}>
+          <div className="record-outer" />
+          <div className="record-inner" />
+        </div>
+        <div className="input-container">
+          <input
+            className="directions"
+            onChange={onTest}
+            value={directions}
+            onKeyDown={(e) => onKeydownHandler(e)}
+          />
+        </div>
+        <div className="stop" onClick={onStop}>
+          <div className="stop-outer" />
+          <div className="stop-inner" />
+        </div>
+        <div className="reload" onClick={onReload}>
+          <div className="reload-outer">
+            <div className="reload-inner">&#x21ba;</div>
           </div>
         </div>
-        <Instructions />
       </div>
-    );
-  }
+      <Instructions />
+    </div>
+  );
 }
 
 export default App;

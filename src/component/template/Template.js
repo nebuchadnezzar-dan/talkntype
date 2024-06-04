@@ -1,11 +1,11 @@
-import React from 'react';
-import Main from '../main/Main';
-import Footer from '../footer/Footer';
+import React from "react";
+import Main from "../main/Main";
+import Footer from "../footer/Footer";
 
-const Template = () => {
+const Template = ({ matrix }) => {
   return (
     <div className="wrapper">
-      <Main />
+      <Main matrix={matrix} />
       <Footer />
     </div>
   );
