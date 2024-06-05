@@ -8,6 +8,9 @@ import Navigation from "../component/navigation/Navigation";
 import Instructions from "../component/instructions/Instructions";
 import { useKey } from "../useKey";
 
+const ROW = 10;
+const COLUMN = 19;
+
 const onReload = reload;
 // const onMove = move;
 const recognition = new (window.SpeechRecognition ||
@@ -18,9 +21,7 @@ recognition.lang = "en-US";
 recognition.continuous = true;
 
 function generateMatrix() {
-  const row = 10;
-  const column = 19;
-  const rowDiv = new Array(row).fill(new Array(column).fill({}));
+  const rowDiv = new Array(ROW).fill(new Array(COLUMN).fill({}));
 
   const matrix = rowDiv.map((row, i, rowArr) => {
     const rowInd = i;
@@ -58,15 +59,6 @@ function generateMatrix() {
   });
   // console.log(matrix);
   return matrix;
-}
-
-function getIndexOfK(arr, k) {
-  for (var i = 0; i < arr.length; i++) {
-    var index = arr[i].indexOf(k);
-    if (index > -1) {
-      return [i, index];
-    }
-  }
 }
 
 function App() {
@@ -144,13 +136,13 @@ function App() {
     }
 
     if (directionsTrimmed === "up") {
-      x.current = +x.current - 1;
+      x.current = x.current === 0 ? 0 : +x.current - 1;
     } else if (directionsTrimmed === "down") {
-      x.current = +x.current + 1;
+      x.current = x.current === ROW ? ROW : +x.current + 1;
     } else if (directionsTrimmed === "right") {
-      y.current = +y.current + 1;
+      y.current = y.current === COLUMN ? COLUMN : +y.current + 1;
     } else if (directionsTrimmed === "left") {
-      y.current = +y.current - 1;
+      y.current = y.current === 0 ? 0 : +y.current - 1;
     } else if (directionsTrimmed === "restart") {
       onReload();
       return "reloaded";
