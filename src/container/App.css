@@ -12,7 +12,7 @@
 
 .recording {
   margin-right: 2rem;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .record {
@@ -93,7 +93,7 @@
   border: 3px solid #000;
   border-radius: 50%;
   font-size: 6rem;
-  margin-left: 2rem;
+  margin-right: 2rem;
   line-height: 1;
   cursor: pointer;
   position: relative;
@@ -119,7 +119,7 @@
   height: 64px;
 }
 .lds-dual-ring:after {
-  content: ' ';
+  content: " ";
   display: block;
   width: 46px;
   height: 46px;

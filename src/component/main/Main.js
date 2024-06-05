@@ -1,65 +1,35 @@
-import React from 'react';
-import './Main.css';
+import React from "react";
+import "./Main.css";
 
-const Main = () => {
-  const row = 10;
-  const column = 19;
-  const rowDiv = [];
-  for (let i = 0; i < row; i++) {
-    rowDiv.push([]);
-    for (let j = 0; j < column; j++) {
-      rowDiv[i].push(<div className="cell" />);
-    }
-  }
+const Main = ({ matrix, passedCells, backgroundImage }) => {
+  // const backgroundImage = Math.floor(Math.random() * 6);
+  passedCells.forEach((e, i) => {
+    matrix[e.x][e.y] = {
+      ...matrix[e.x][e.y],
+      className: matrix[e.x][e.y].className.replace("active", " ") + " passed",
+    };
+    if (passedCells.length - 1 === i)
+      matrix[e.x][e.y] = {
+        ...matrix[e.x][e.y],
+        className: matrix[e.x][e.y].className + " active",
+      };
+  });
+  if (passedCells.length > 0)
+    matrix[0][0] = {
+      ...matrix[0][0],
+      className: matrix[0][0].className.replace("active", " ") + " passed",
+    };
+
   return (
     <div className="main">
       <div className="content">
-        <div className="map map-image-1">
-          {rowDiv.map((row, i, rowArr) => {
-            const rowInd = i;
-            const rowArrL = rowArr.length - 1;
+        <div className={`map map-image-${backgroundImage}`}>
+          {matrix.map((matrixRow, i) => {
             return (
               <div className="rows" key={i}>
-                {row.map((cell, i, arr) => {
-                  const ilength = arr.length - 1;
-                  const num = Math.floor(Math.random() * 16 + 1);
-                  if (rowInd === 0 && i === 0) {
-                    return (
-                      <div
-                        className={`cell active rand-${num} upper-left-edge x${rowInd}y${i}`}
-                        key={rowInd + i}
-                      />
-                    );
-                  } else if (rowInd === rowArrL && i === 0) {
-                    return (
-                      <div
-                        className={`cell rand-${num} lower-left-edge x${rowInd}y${i}`}
-                        key={rowInd + i}
-                      />
-                    );
-                  } else if (rowInd === 0 && i === ilength) {
-                    return (
-                      <div
-                        className={`cell rand-${num} upper-right-edge x${rowInd}y${i}`}
-                        key={rowInd + i}
-                      />
-                    );
-                  } else if (rowInd === rowArrL && i === ilength) {
-                    return (
-                      <div
-                        className={`cell rand-${num} lower-right-edge x${rowInd}y${i}`}
-                        key={rowInd + i}
-                      />
-                    );
-                  } else {
-                    return (
-                      <div
-                        className={`cell rand-${num} x${rowInd}y${i}`}
-                        key={rowInd + i}
-                      />
-                    );
-                  }
-                })}
+                {matrixRow.map((cell) => (
+                  <div className={cell.className} key={cell.key} />
+                ))}
               </div>
             );
           })}

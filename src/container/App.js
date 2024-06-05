@@ -1,111 +1,157 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import "./App.css";
 
-import { onReload as reload, onMove as move } from './controller';
-import { token as tokenFromApiToken } from './apitoken';
+import Template from "../component/template/Template";
+import Navigation from "../component/navigation/Navigation";
+import Instructions from "../component/instructions/Instructions";
+import { useKey } from "../hooks/useKey";
+import { COLUMN, ROW, generateMatrix } from "../utils/helper";
+import Bar from "../component/bar/Bar";
 
-import Template from '../component/template/Template';
-import Navigation from '../component/navigation/Navigation';
-import Instructions from '../component/instructions/Instructions';
+const recognition = new (window.SpeechRecognition ||
+  window.webkitSpeechRecognition ||
+  window.mozSpeechRecognition ||
+  window.msSpeechRecognition)();
+recognition.lang = "en-US";
+recognition.continuous = true;
 
-import recognizeMic from 'watson-speech/speech-to-text/recognize-microphone';
+function App() {
+  const [isRecording, setIsRecording] = useState(false);
+  const [matrix, setMatrix] = useState(generateMatrix());
+  const [passedCells, setPassedCells] = useState([]);
+  const [backgroundImage, setBackgroundImage] = useState(0);
 
-const onReload = reload;
-const onMove = move;
+  const x = useRef(0);
+  const y = useRef(0);
+  const inputDirection = useRef(null);
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {};
+  const handleStopButton = useCallback(() => {
+    setIsRecording(false);
+    reloadMatrix();
+    recognition.abort();
+  }, []);
+
+  const handleMovingOfActiveCell = useCallback(
+    (transcript = "") => {
+      let directionsTrimmed =
+        inputDirection.current.value === ""
+          ? transcript
+          : inputDirection.current.value;
+      const RawDirections = inputDirection.current.value.trim().toLowerCase();
+
+      if (/(up|down|right|left|restart)+/.test(RawDirections)) {
+        directionsTrimmed = inputDirection.current.value.match(
+          /(up|down|right|left|restart)+/
+        )[0];
+      }
+
+      if (directionsTrimmed === "up") {
+        x.current = x.current === 0 ? 0 : +x.current - 1;
+      } else if (directionsTrimmed === "down") {
+        x.current = x.current === ROW - 1 ? ROW - 1 : +x.current + 1;
+      } else if (directionsTrimmed === "right") {
+        y.current = y.current === COLUMN - 1 ? COLUMN - 1 : +y.current + 1;
+      } else if (directionsTrimmed === "left") {
+        y.current = y.current === 0 ? 0 : +y.current - 1;
+      } else if (directionsTrimmed === "restart") {
+        handleStopButton();
+        reloadMatrix();
+        return "reloaded";
+      }
+
+      if (
+        !(
+          passedCells.at(-1)?.x === x.current &&
+          passedCells.at(-1)?.y === y.current
+        )
+      )
+        setPassedCells([...passedCells, { x: x.current, y: y.current }]);
+    },
+    [passedCells, handleStopButton]
+  );
+
+  useKey("ArrowDown", function () {
+    handleMovingOfActiveCell("down");
+  });
+  useKey("ArrowRight", function () {
+    handleMovingOfActiveCell("right");
+  });
+  useKey("ArrowLeft", function () {
+    handleMovingOfActiveCell("left");
+  });
+  useKey("ArrowUp", function () {
+    handleMovingOfActiveCell("up");
+  });
+
+  useEffect(
+    function () {
+      recognition.onstart = () => {
+        console.log("listening");
+      };
+      recognition.onresult = (event) => {
+        var transcript = "";
+        for (var i = event.resultIndex; i < event.results.length; i++) {
+          transcript = event.results[i][0].transcript;
+          transcript.replace("\n", "<br>");
+        }
+
+        inputDirection.current.value = transcript;
+        handleMovingOfActiveCell();
+      };
+
+      recognition.onend = () => {
+        console.log("ended");
+      };
+    },
+    [handleMovingOfActiveCell]
+  );
+
+  function reloadMatrix() {
+    setMatrix(generateMatrix());
+    setPassedCells([]);
+    setBackgroundImage(Math.floor(Math.random() * 6));
+    Math.floor(Math.random() * 6);
+    inputDirection.current.value = "";
+
+    x.current = 0;
+    y.current = 0;
+    console.log("reloaded");
   }
 
-  onListenClick = async () => {
-    await this.setState({ loading: true });
-    console.log(this.state.loading);
-    await fetch(tokenFromApiToken)
-      .then(response => {
-        return response.text();
-      })
-      .then(token => {
-        const stream = recognizeMic({
-          access_token: token, // use `access_token` as the parameter name if using an RC service
-          objectMode: true, // send objects instead of text
-          extractResults: true, // convert {results: [{alternatives:[...]}], result_index: 0} to {alternatives: [...], index: 0}
-          format: false // optional - performs basic formatting on the results such as capitals an periods
-        });
-        this.setState({ loading: false, recording: true });
-        // console.log(this.state.loading);
-        stream.on('data', data => {
-          const directions = data.alternatives[0].transcript;
-          document.querySelector('.directions').value = directions;
-          this.onTest();
-          // console.log(data.alternatives[0].transcript);
-        });
-        stream.on('error', function(err) {
-          console.log(err);
-        });
-        document.querySelector('.stop').onclick = stream.stop.bind(stream);
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-  };
+  function handleListenButton() {
+    setIsRecording(true);
+    recognition.start();
+  }
 
-  onTest = () => {
-    let directions = document.querySelector('.directions').value;
-    onMove(directions);
-  };
-  onKeydownHandler = e => {
+  function handleDirectionsInput(e) {
+    handleMovingOfActiveCell();
+  }
+  function handleInputKeyDown(e) {
     if (e.keyCode === 13) {
-      let directions = document.querySelector('.directions').value;
-      onMove(directions);
+      handleMovingOfActiveCell();
     }
-  };
-
-  onStop = () => {
-    this.setState({ recording: false });
-    onReload();
-  };
-
-  render() {
-    return (
-      <div className="App">
-        <Navigation />
-        <Template />
-        <div className="below">
-          <div className="recording">
-            {this.state.loading ? <div className="lds-dual-ring" /> : ''}
-            {this.state.recording ? (
-              <p className="record-red">Recording!</p>
-            ) : (
-              <p className="not-record">Not Recording</p>
-            )}
-          </div>
-          <div className="record" onClick={this.onListenClick}>
-            <div className="record-outer" />
-            <div className="record-inner" />
-          </div>
-          <div className="input-container">
-            <input
-              className="directions"
-              onChange={this.onTest}
-              onKeyDown={this.onKeydownHandler.bind(this)}
-            />
-          </div>
-          <div className="stop" onClick={this.onStop}>
-            <div className="stop-outer" />
-            <div className="stop-inner" />
-          </div>
-          <div className="reload" onClick={onReload}>
-            <div className="reload-outer">
-              <div className="reload-inner">&#x21ba;</div>
-            </div>
-          </div>
-        </div>
-        <Instructions />
-      </div>
-    );
   }
+
+  return (
+    <div className="App">
+      <Navigation />
+      <Template
+        matrix={matrix}
+        passedCells={passedCells}
+        backgroundImage={backgroundImage}
+      />
+      <Bar
+        isRecording={isRecording}
+        handleListenButton={handleListenButton}
+        handleStopButton={handleStopButton}
+        handleDirectionsInput={handleDirectionsInput}
+        inputDirection={inputDirection}
+        handleInputKeyDown={handleInputKeyDown}
+        reloadMatrix={reloadMatrix}
+      />
+      <Instructions />
+    </div>
+  );
 }
 
 export default App;

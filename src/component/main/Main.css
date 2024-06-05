@@ -125,6 +125,10 @@
   overflow: auto;
 }
 
+.map-image-0 {
+  background-image: url(https://i.imgflip.com/707bul.png);
+}
+
 .map-image-1 {
   background-image: url(https://images.unsplash.com/photo-1510422136352-eaef78506ce5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80);
 }
@@ -133,7 +137,7 @@
   background-image: url(https://memeswillsaveus.files.wordpress.com/2016/09/no_frisbee_dog.jpg);
 }
 .map-image-3 {
-  background-image: url(https://s.en.fishki.net/upload/en/2016/09/27/2087349/tn/b3d6a250971b0e8c6b2c620c4d615c43.jpg);
+  background-image: url(https://i0.wp.com/newspack-washingtoncitypaper.s3.amazonaws.com/uploads/2023/10/Shiba-Inu-Has-Competition-As-A-Hot-New-Meme-Coin-Project-Trends.png?fit=624%2C539&ssl=1);
 }
 .map-image-4 {
   background-image: url(https://cdn.cnn.com/cnn/interactive/2018/11/entertainment/dogs-catching-treats-cnnphotos/media/01.jpg);
