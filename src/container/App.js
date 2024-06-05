@@ -19,6 +19,8 @@ function App() {
   const [isRecording, setIsRecording] = useState(false);
   const [matrix, setMatrix] = useState(generateMatrix());
   const [passedCells, setPassedCells] = useState([]);
+  const [backgroundImage, setBackgroundImage] = useState(0);
+
   const x = useRef(0);
   const y = useRef(0);
   const inputDirection = useRef(null);
@@ -46,9 +48,9 @@ function App() {
       if (directionsTrimmed === "up") {
         x.current = x.current === 0 ? 0 : +x.current - 1;
       } else if (directionsTrimmed === "down") {
-        x.current = x.current === ROW ? ROW : +x.current + 1;
+        x.current = x.current === ROW - 1 ? ROW - 1 : +x.current + 1;
       } else if (directionsTrimmed === "right") {
-        y.current = y.current === COLUMN ? COLUMN : +y.current + 1;
+        y.current = y.current === COLUMN - 1 ? COLUMN - 1 : +y.current + 1;
       } else if (directionsTrimmed === "left") {
         y.current = y.current === 0 ? 0 : +y.current - 1;
       } else if (directionsTrimmed === "restart") {
@@ -57,7 +59,13 @@ function App() {
         return "reloaded";
       }
 
-      setPassedCells([...passedCells, { x: x.current, y: y.current }]);
+      if (
+        !(
+          passedCells.at(-1)?.x === x.current &&
+          passedCells.at(-1)?.y === y.current
+        )
+      )
+        setPassedCells([...passedCells, { x: x.current, y: y.current }]);
     },
     [passedCells, handleStopButton]
   );
@@ -101,6 +109,8 @@ function App() {
   function reloadMatrix() {
     setMatrix(generateMatrix());
     setPassedCells([]);
+    setBackgroundImage(Math.floor(Math.random() * 6));
+    Math.floor(Math.random() * 6);
     inputDirection.current.value = "";
 
     x.current = 0;
@@ -125,7 +135,11 @@ function App() {
   return (
     <div className="App">
       <Navigation />
-      <Template matrix={matrix} passedCells={passedCells} />
+      <Template
+        matrix={matrix}
+        passedCells={passedCells}
+        backgroundImage={backgroundImage}
+      />
       <Bar
         isRecording={isRecording}
         handleListenButton={handleListenButton}

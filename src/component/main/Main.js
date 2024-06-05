@@ -1,7 +1,8 @@
 import React from "react";
 import "./Main.css";
 
-const Main = ({ matrix, passedCells }) => {
+const Main = ({ matrix, passedCells, backgroundImage }) => {
+  // const backgroundImage = Math.floor(Math.random() * 6);
   passedCells.forEach((e, i) => {
     matrix[e.x][e.y] = {
       ...matrix[e.x][e.y],
@@ -22,7 +23,7 @@ const Main = ({ matrix, passedCells }) => {
   return (
     <div className="main">
       <div className="content">
-        <div className="map map-image-1">
+        <div className={`map map-image-${backgroundImage}`}>
           {matrix.map((matrixRow, i) => {
             return (
               <div className="rows" key={i}>
