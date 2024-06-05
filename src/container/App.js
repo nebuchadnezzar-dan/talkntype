@@ -1,4 +1,10 @@
-import React, { Component, useEffect, useRef, useState } from "react";
+import React, {
+  Component,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import "./App.css";
 
 import { onReload as reload } from "./controller";
@@ -63,76 +69,26 @@ function generateMatrix() {
 
 function App() {
   const [isRecording, setIsRecording] = useState(false);
-  const [directions, setIsDirections] = useState("");
   const [matrix] = useState(generateMatrix());
   // const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
   const x = useRef(0);
   const y = useRef(0);
+  const inputDirection = useRef(null);
 
-  useKey("ArrowDown", function () {
-    onMove("down");
-  });
-  useKey("ArrowRight", function () {
-    onMove("right");
-  });
-  useKey("ArrowLeft", function () {
-    onMove("left");
-  });
-  useKey("ArrowUp", function () {
-    onMove("up");
-  });
-
-  function onListenClick() {
-    setIsRecording(true);
-    recognition.start();
-    recognition.onstart = () => {
-      console.log("listening");
-    };
-
-    recognition.onresult = (event) => {
-      var transcript = "";
-      for (var i = event.resultIndex; i < event.results.length; i++) {
-        transcript = event.results[i][0].transcript;
-        transcript.replace("\n", "<br>");
-      }
-
-      setIsDirections(transcript);
-      // console.log(transcript);
-      onMove(transcript);
-      // document.querySelector(".directions").value = transcript;
-    };
-
-    recognition.onend = () => {
-      console.log("ended");
-    };
-  }
-
-  function onTest(e) {
-    // let directions = document.querySelector(".directions").value;
-    onMove();
-    setIsDirections(e.target.value);
-  }
-  function onKeydownHandler(e) {
-    if (e.keyCode === 13) {
-      // let directions = document.querySelector(".directions").value;
-      onMove();
-    }
-  }
-
-  function onStop() {
-    // this.setState({ recording: false });
-    setIsRecording(false);
-    onReload();
-    recognition.abort();
-  }
-
-  function onMove(transcript = "") {
+  const onMove = useCallback((transcript = "") => {
     console.log(transcript);
-    let directionsTrimmed = directions === "" ? transcript : directions;
-    const RawDirections = directions.trim().toLowerCase();
+    console.log(inputDirection.current.value);
+    // let directionsTrimmed = directions === "" ? transcript : directions;
+    let directionsTrimmed =
+      inputDirection.current.value === ""
+        ? transcript
+        : inputDirection.current.value;
+    const RawDirections = inputDirection.current.value.trim().toLowerCase();
     // let directionsTrimmed;
     if (/(up|down|right|left|restart)+/.test(RawDirections)) {
-      directionsTrimmed = directions.match(/(up|down|right|left|restart)+/)[0];
+      directionsTrimmed = inputDirection.current.value.match(
+        /(up|down|right|left|restart)+/
+      )[0];
     }
 
     if (directionsTrimmed === "up") {
@@ -158,6 +114,68 @@ function App() {
         .querySelector(`.x${x.current}y${y.current}`)
         .classList.add("passed");
     }
+  }, []);
+
+  useKey("ArrowDown", function () {
+    onMove("down");
+  });
+  useKey("ArrowRight", function () {
+    onMove("right");
+  });
+  useKey("ArrowLeft", function () {
+    onMove("left");
+  });
+  useKey("ArrowUp", function () {
+    onMove("up");
+  });
+
+  useEffect(
+    function () {
+      recognition.onstart = () => {
+        console.log("listening");
+      };
+      recognition.onresult = (event) => {
+        var transcript = "";
+        console.log(event.results);
+        // const speechArray = event.results.map((speech) => speech[0].transcript);
+        console.log(Object.keys(event.results));
+        for (var i = event.resultIndex; i < event.results.length; i++) {
+          transcript = event.results[i][0].transcript;
+          transcript.replace("\n", "<br>");
+        }
+
+        // setIsDirections((curr) => transcript);
+        // console.log(transcript);
+        inputDirection.current.value = transcript;
+        onMove();
+        // document.querySelector(".directions").value = transcript;
+      };
+
+      recognition.onend = () => {
+        console.log("ended");
+      };
+    },
+    [onMove]
+  );
+
+  function handleListenButton() {
+    setIsRecording(true);
+    recognition.start();
+  }
+
+  function handleDirectionsInput(e) {
+    onMove();
+  }
+  function handleInputKeyDown(e) {
+    if (e.keyCode === 13) {
+      onMove();
+    }
+  }
+
+  function handleStopButton() {
+    setIsRecording(false);
+    onReload();
+    recognition.abort();
   }
 
   return (
@@ -174,19 +192,19 @@ function App() {
             <p className="not-record">Not Recording</p>
           )}
         </div>
-        <div className="record" onClick={onListenClick}>
+        <div className="record" onClick={handleListenButton}>
           <div className="record-outer" />
           <div className="record-inner" />
         </div>
         <div className="input-container">
           <input
             className="directions"
-            onChange={onTest}
-            value={directions}
-            onKeyDown={(e) => onKeydownHandler(e)}
+            onChange={handleDirectionsInput}
+            ref={inputDirection}
+            onKeyDown={(e) => handleInputKeyDown(e)}
           />
         </div>
-        <div className="stop" onClick={onStop}>
+        <div className="stop" onClick={handleStopButton}>
           <div className="stop-outer" />
           <div className="stop-inner" />
         </div>
