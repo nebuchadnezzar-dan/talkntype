@@ -18,7 +18,7 @@ const ROW = 10;
 const COLUMN = 19;
 
 const onReload = reload;
-// const onMove = move;
+// const handleMovingOfActiveCell = move;
 const recognition = new (window.SpeechRecognition ||
   window.webkitSpeechRecognition ||
   window.mozSpeechRecognition ||
@@ -75,16 +75,13 @@ function App() {
   const y = useRef(0);
   const inputDirection = useRef(null);
 
-  const onMove = useCallback((transcript = "") => {
-    console.log(transcript);
-    console.log(inputDirection.current.value);
-    // let directionsTrimmed = directions === "" ? transcript : directions;
+  const handleMovingOfActiveCell = useCallback((transcript = "") => {
     let directionsTrimmed =
       inputDirection.current.value === ""
         ? transcript
         : inputDirection.current.value;
     const RawDirections = inputDirection.current.value.trim().toLowerCase();
-    // let directionsTrimmed;
+
     if (/(up|down|right|left|restart)+/.test(RawDirections)) {
       directionsTrimmed = inputDirection.current.value.match(
         /(up|down|right|left|restart)+/
@@ -105,7 +102,6 @@ function App() {
     }
 
     if (document.querySelector(`.x${x.current}y${y.current}`)) {
-      console.log(x, y);
       document.querySelector(".active").classList.remove("active");
       document
         .querySelector(`.x${x.current}y${y.current}`)
@@ -117,16 +113,20 @@ function App() {
   }, []);
 
   useKey("ArrowDown", function () {
-    onMove("down");
+    handleMovingOfActiveCell("down");
+    // e.view.event.preventDefault();
   });
   useKey("ArrowRight", function () {
-    onMove("right");
+    // e.view.event.preventDefault();
+    handleMovingOfActiveCell("right");
   });
   useKey("ArrowLeft", function () {
-    onMove("left");
+    // e.view.event.preventDefault();
+    handleMovingOfActiveCell("left");
   });
   useKey("ArrowUp", function () {
-    onMove("up");
+    // e.view.event.preventDefault();
+    handleMovingOfActiveCell("up");
   });
 
   useEffect(
@@ -144,18 +144,15 @@ function App() {
           transcript.replace("\n", "<br>");
         }
 
-        // setIsDirections((curr) => transcript);
-        // console.log(transcript);
         inputDirection.current.value = transcript;
-        onMove();
-        // document.querySelector(".directions").value = transcript;
+        handleMovingOfActiveCell();
       };
 
       recognition.onend = () => {
         console.log("ended");
       };
     },
-    [onMove]
+    [handleMovingOfActiveCell]
   );
 
   function handleListenButton() {
@@ -164,11 +161,11 @@ function App() {
   }
 
   function handleDirectionsInput(e) {
-    onMove();
+    handleMovingOfActiveCell();
   }
   function handleInputKeyDown(e) {
     if (e.keyCode === 13) {
-      onMove();
+      handleMovingOfActiveCell();
     }
   }
 
@@ -184,7 +181,6 @@ function App() {
       <Template matrix={matrix} />
       <div className="below">
         <div className="recording">
-          {/* {<div className="loading lds-dual-ring" />} */}
           <div className="indicator"></div>
           {isRecording ? (
             <p className="record-red">Recording!</p>
@@ -192,10 +188,17 @@ function App() {
             <p className="not-record">Not Recording</p>
           )}
         </div>
-        <div className="record" onClick={handleListenButton}>
-          <div className="record-outer" />
-          <div className="record-inner" />
-        </div>
+        {isRecording ? (
+          <div className="stop" onClick={handleStopButton}>
+            <div className="stop-outer" />
+            <div className="stop-inner" />
+          </div>
+        ) : (
+          <div className="record" onClick={handleListenButton}>
+            <div className="record-outer" />
+            <div className="record-inner" />
+          </div>
+        )}
         <div className="input-container">
           <input
             className="directions"
@@ -203,10 +206,6 @@ function App() {
             ref={inputDirection}
             onKeyDown={(e) => handleInputKeyDown(e)}
           />
-        </div>
-        <div className="stop" onClick={handleStopButton}>
-          <div className="stop-outer" />
-          <div className="stop-inner" />
         </div>
         <div className="reload" onClick={onReload}>
           <div className="reload-outer">
