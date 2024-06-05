@@ -1,13 +1,5 @@
-import React, {
-  Component,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
-
-import { onReload as reload } from "./controller";
 
 import Template from "../component/template/Template";
 import Navigation from "../component/navigation/Navigation";
@@ -16,9 +8,8 @@ import { useKey } from "../useKey";
 
 const ROW = 10;
 const COLUMN = 19;
+const CELL_COLOR = 16;
 
-const onReload = reload;
-// const handleMovingOfActiveCell = move;
 const recognition = new (window.SpeechRecognition ||
   window.webkitSpeechRecognition ||
   window.mozSpeechRecognition ||
@@ -34,7 +25,7 @@ function generateMatrix() {
     const rowArrL = rowArr.length - 1;
     return row.map((_, i, arr) => {
       const ilength = arr.length - 1;
-      const num = Math.floor(Math.random() * 16 + 1);
+      const num = Math.floor(Math.random() * CELL_COLOR + 1);
       if (rowInd === 0 && i === 0) {
         return {
           className: `cell active rand-${num} upper-left-edge x${rowInd}y${i}`,
@@ -63,69 +54,59 @@ function generateMatrix() {
       }
     });
   });
-  // console.log(matrix);
   return matrix;
 }
 
 function App() {
   const [isRecording, setIsRecording] = useState(false);
-  const [matrix] = useState(generateMatrix());
-  // const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
+  const [matrix, setMatrix] = useState(generateMatrix());
+  const [passedCells, setPassedCells] = useState([]);
   const x = useRef(0);
   const y = useRef(0);
   const inputDirection = useRef(null);
 
-  const handleMovingOfActiveCell = useCallback((transcript = "") => {
-    let directionsTrimmed =
-      inputDirection.current.value === ""
-        ? transcript
-        : inputDirection.current.value;
-    const RawDirections = inputDirection.current.value.trim().toLowerCase();
+  const handleMovingOfActiveCell = useCallback(
+    (transcript = "") => {
+      let directionsTrimmed =
+        inputDirection.current.value === ""
+          ? transcript
+          : inputDirection.current.value;
+      const RawDirections = inputDirection.current.value.trim().toLowerCase();
 
-    if (/(up|down|right|left|restart)+/.test(RawDirections)) {
-      directionsTrimmed = inputDirection.current.value.match(
-        /(up|down|right|left|restart)+/
-      )[0];
-    }
+      if (/(up|down|right|left|restart)+/.test(RawDirections)) {
+        directionsTrimmed = inputDirection.current.value.match(
+          /(up|down|right|left|restart)+/
+        )[0];
+      }
 
-    if (directionsTrimmed === "up") {
-      x.current = x.current === 0 ? 0 : +x.current - 1;
-    } else if (directionsTrimmed === "down") {
-      x.current = x.current === ROW ? ROW : +x.current + 1;
-    } else if (directionsTrimmed === "right") {
-      y.current = y.current === COLUMN ? COLUMN : +y.current + 1;
-    } else if (directionsTrimmed === "left") {
-      y.current = y.current === 0 ? 0 : +y.current - 1;
-    } else if (directionsTrimmed === "restart") {
-      onReload();
-      return "reloaded";
-    }
+      if (directionsTrimmed === "up") {
+        x.current = x.current === 0 ? 0 : +x.current - 1;
+      } else if (directionsTrimmed === "down") {
+        x.current = x.current === ROW ? ROW : +x.current + 1;
+      } else if (directionsTrimmed === "right") {
+        y.current = y.current === COLUMN ? COLUMN : +y.current + 1;
+      } else if (directionsTrimmed === "left") {
+        y.current = y.current === 0 ? 0 : +y.current - 1;
+      } else if (directionsTrimmed === "restart") {
+        reloadMatrix();
+        return "reloaded";
+      }
 
-    if (document.querySelector(`.x${x.current}y${y.current}`)) {
-      document.querySelector(".active").classList.remove("active");
-      document
-        .querySelector(`.x${x.current}y${y.current}`)
-        .classList.add("active");
-      document
-        .querySelector(`.x${x.current}y${y.current}`)
-        .classList.add("passed");
-    }
-  }, []);
+      setPassedCells([...passedCells, { x: x.current, y: y.current }]);
+    },
+    [passedCells]
+  );
 
   useKey("ArrowDown", function () {
     handleMovingOfActiveCell("down");
-    // e.view.event.preventDefault();
   });
   useKey("ArrowRight", function () {
-    // e.view.event.preventDefault();
     handleMovingOfActiveCell("right");
   });
   useKey("ArrowLeft", function () {
-    // e.view.event.preventDefault();
     handleMovingOfActiveCell("left");
   });
   useKey("ArrowUp", function () {
-    // e.view.event.preventDefault();
     handleMovingOfActiveCell("up");
   });
 
@@ -136,8 +117,6 @@ function App() {
       };
       recognition.onresult = (event) => {
         var transcript = "";
-        console.log(event.results);
-        // const speechArray = event.results.map((speech) => speech[0].transcript);
         console.log(Object.keys(event.results));
         for (var i = event.resultIndex; i < event.results.length; i++) {
           transcript = event.results[i][0].transcript;
@@ -155,6 +134,15 @@ function App() {
     [handleMovingOfActiveCell]
   );
 
+  function reloadMatrix() {
+    setMatrix(generateMatrix());
+    setPassedCells([]);
+    inputDirection.current.value = "";
+
+    x.current = 0;
+    y.current = 0;
+  }
+
   function handleListenButton() {
     setIsRecording(true);
     recognition.start();
@@ -171,14 +159,14 @@ function App() {
 
   function handleStopButton() {
     setIsRecording(false);
-    onReload();
+    reloadMatrix();
     recognition.abort();
   }
 
   return (
     <div className="App">
       <Navigation />
-      <Template matrix={matrix} />
+      <Template matrix={matrix} passedCells={passedCells} />
       <div className="below">
         <div className="recording">
           <div className="indicator"></div>
@@ -207,7 +195,7 @@ function App() {
             onKeyDown={(e) => handleInputKeyDown(e)}
           />
         </div>
-        <div className="reload" onClick={onReload}>
+        <div className="reload" onClick={reloadMatrix}>
           <div className="reload-outer">
             <div className="reload-inner">&#x21ba;</div>
           </div>

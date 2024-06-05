@@ -2,10 +2,10 @@ import React from "react";
 import Main from "../main/Main";
 import Footer from "../footer/Footer";
 
-const Template = ({ matrix }) => {
+const Template = ({ matrix, passedCells }) => {
   return (
     <div className="wrapper">
-      <Main matrix={matrix} />
+      <Main matrix={matrix} passedCells={passedCells} />
       <Footer />
     </div>
   );
