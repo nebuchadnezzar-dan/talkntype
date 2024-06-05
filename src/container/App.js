@@ -189,12 +189,12 @@ function App() {
           )}
         </div>
         {isRecording ? (
-          <div className="stop" onClick={handleStopButton}>
+          <div className="stop" role="button" onClick={handleStopButton}>
             <div className="stop-outer" />
             <div className="stop-inner" />
           </div>
         ) : (
-          <div className="record" onClick={handleListenButton}>
+          <div className="record" role="button" onClick={handleListenButton}>
             <div className="record-outer" />
             <div className="record-inner" />
           </div>
