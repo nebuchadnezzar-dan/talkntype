@@ -4,11 +4,9 @@ import "./App.css";
 import Template from "../component/template/Template";
 import Navigation from "../component/navigation/Navigation";
 import Instructions from "../component/instructions/Instructions";
-import { useKey } from "../useKey";
-
-const ROW = 10;
-const COLUMN = 19;
-const CELL_COLOR = 16;
+import { useKey } from "../hooks/useKey";
+import { COLUMN, ROW, generateMatrix } from "../utils/helper";
+import Bar from "../component/bar/Bar";
 
 const recognition = new (window.SpeechRecognition ||
   window.webkitSpeechRecognition ||
@@ -16,46 +14,6 @@ const recognition = new (window.SpeechRecognition ||
   window.msSpeechRecognition)();
 recognition.lang = "en-US";
 recognition.continuous = true;
-
-function generateMatrix() {
-  const rowDiv = new Array(ROW).fill(new Array(COLUMN).fill({}));
-
-  const matrix = rowDiv.map((row, i, rowArr) => {
-    const rowInd = i;
-    const rowArrL = rowArr.length - 1;
-    return row.map((_, i, arr) => {
-      const ilength = arr.length - 1;
-      const num = Math.floor(Math.random() * CELL_COLOR + 1);
-      if (rowInd === 0 && i === 0) {
-        return {
-          className: `cell active rand-${num} upper-left-edge x${rowInd}y${i}`,
-          key: rowInd + i,
-        };
-      } else if (rowInd === rowArrL && i === 0) {
-        return {
-          className: `cell rand-${num} lower-left-edge x${rowInd}y${i}`,
-          key: rowInd + i,
-        };
-      } else if (rowInd === 0 && i === ilength) {
-        return {
-          className: `cell rand-${num} upper-right-edge x${rowInd}y${i}`,
-          key: rowInd + i,
-        };
-      } else if (rowInd === rowArrL && i === ilength) {
-        return {
-          className: `cell rand-${num} lower-right-edge x${rowInd}y${i}`,
-          key: rowInd + i,
-        };
-      } else {
-        return {
-          className: `cell rand-${num} x${rowInd}y${i}`,
-          key: rowInd + i,
-        };
-      }
-    });
-  });
-  return matrix;
-}
 
 function App() {
   const [isRecording, setIsRecording] = useState(false);
@@ -168,40 +126,15 @@ function App() {
     <div className="App">
       <Navigation />
       <Template matrix={matrix} passedCells={passedCells} />
-      <div className="below">
-        <div className="recording">
-          <div className="indicator"></div>
-          {isRecording ? (
-            <p className="record-red">Recording!</p>
-          ) : (
-            <p className="not-record">Not Recording</p>
-          )}
-        </div>
-        {isRecording ? (
-          <div className="stop" role="button" onClick={handleStopButton}>
-            <div className="stop-outer" />
-            <div className="stop-inner" />
-          </div>
-        ) : (
-          <div className="record" role="button" onClick={handleListenButton}>
-            <div className="record-outer" />
-            <div className="record-inner" />
-          </div>
-        )}
-        <div className="input-container">
-          <input
-            className="directions"
-            onChange={handleDirectionsInput}
-            ref={inputDirection}
-            onKeyDown={(e) => handleInputKeyDown(e)}
-          />
-        </div>
-        <div className="reload" onClick={reloadMatrix}>
-          <div className="reload-outer">
-            <div className="reload-inner">&#x21ba;</div>
-          </div>
-        </div>
-      </div>
+      <Bar
+        isRecording={isRecording}
+        handleListenButton={handleListenButton}
+        handleStopButton={handleStopButton}
+        handleDirectionsInput={handleDirectionsInput}
+        inputDirection={inputDirection}
+        handleInputKeyDown={handleInputKeyDown}
+        reloadMatrix={reloadMatrix}
+      />
       <Instructions />
     </div>
   );
