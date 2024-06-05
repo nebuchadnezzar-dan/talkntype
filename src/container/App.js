@@ -65,6 +65,12 @@ function App() {
   const y = useRef(0);
   const inputDirection = useRef(null);
 
+  const handleStopButton = useCallback(() => {
+    setIsRecording(false);
+    reloadMatrix();
+    recognition.abort();
+  }, []);
+
   const handleMovingOfActiveCell = useCallback(
     (transcript = "") => {
       let directionsTrimmed =
@@ -88,13 +94,14 @@ function App() {
       } else if (directionsTrimmed === "left") {
         y.current = y.current === 0 ? 0 : +y.current - 1;
       } else if (directionsTrimmed === "restart") {
+        handleStopButton();
         reloadMatrix();
         return "reloaded";
       }
 
       setPassedCells([...passedCells, { x: x.current, y: y.current }]);
     },
-    [passedCells]
+    [passedCells, handleStopButton]
   );
 
   useKey("ArrowDown", function () {
@@ -117,7 +124,6 @@ function App() {
       };
       recognition.onresult = (event) => {
         var transcript = "";
-        console.log(Object.keys(event.results));
         for (var i = event.resultIndex; i < event.results.length; i++) {
           transcript = event.results[i][0].transcript;
           transcript.replace("\n", "<br>");
@@ -141,6 +147,7 @@ function App() {
 
     x.current = 0;
     y.current = 0;
+    console.log("reloaded");
   }
 
   function handleListenButton() {
@@ -155,12 +162,6 @@ function App() {
     if (e.keyCode === 13) {
       handleMovingOfActiveCell();
     }
-  }
-
-  function handleStopButton() {
-    setIsRecording(false);
-    reloadMatrix();
-    recognition.abort();
   }
 
   return (
