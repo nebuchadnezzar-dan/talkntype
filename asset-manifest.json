@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/talkntype/static/css/main.8cadfeac.chunk.css",
-    "main.js": "/talkntype/static/js/main.099cbbb6.chunk.js",
-    "main.js.map": "/talkntype/static/js/main.099cbbb6.chunk.js.map",
+    "main.css": "/talkntype/static/css/main.853121ba.chunk.css",
+    "main.js": "/talkntype/static/js/main.fbe04498.chunk.js",
+    "main.js.map": "/talkntype/static/js/main.fbe04498.chunk.js.map",
     "runtime~main.js": "/talkntype/static/js/runtime~main.7dff04ef.js",
     "runtime~main.js.map": "/talkntype/static/js/runtime~main.7dff04ef.js.map",
-    "static/js/2.d2d4caef.chunk.js": "/talkntype/static/js/2.d2d4caef.chunk.js",
-    "static/js/2.d2d4caef.chunk.js.map": "/talkntype/static/js/2.d2d4caef.chunk.js.map",
+    "static/js/2.dc43aeb0.chunk.js": "/talkntype/static/js/2.dc43aeb0.chunk.js",
+    "static/js/2.dc43aeb0.chunk.js.map": "/talkntype/static/js/2.dc43aeb0.chunk.js.map",
     "index.html": "/talkntype/index.html",
-    "precache-manifest.1c9983bcd331b129b8343b1165303174.js": "/talkntype/precache-manifest.1c9983bcd331b129b8343b1165303174.js",
+    "precache-manifest.dddb757a203d68406e643b56787aea4d.js": "/talkntype/precache-manifest.dddb757a203d68406e643b56787aea4d.js",
     "service-worker.js": "/talkntype/service-worker.js",
-    "static/css/main.8cadfeac.chunk.css.map": "/talkntype/static/css/main.8cadfeac.chunk.css.map",
+    "static/css/main.853121ba.chunk.css.map": "/talkntype/static/css/main.853121ba.chunk.css.map",
     "static/media/github.1fc7ff0b.svg": "/talkntype/static/media/github.1fc7ff0b.svg",
     "static/media/mic.fd8ccbdd.svg": "/talkntype/static/media/mic.fd8ccbdd.svg"
   }
